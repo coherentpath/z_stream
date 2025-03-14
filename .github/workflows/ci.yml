@@ -10,8 +10,12 @@ on:
 
 jobs:
   test:
-    name: Run tests
     runs-on: ubuntu-latest
+    name: Elixir ${{ matrix.elixir }} / OTP ${{ matrix.otp }}
+    strategy:
+      matrix:
+        otp: ['26', '27']
+        elixir: ['1.17', '1.18']
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -20,8 +24,8 @@ jobs:
         uses: erlef/setup-beam@v1
         id: setup-elixir
         with:
-          version-type: strict
-          version-file: .tool-versions
+          elixir-version: ${{ matrix.elixir }}
+          otp-version: ${{ matrix.otp }}
 
       - name: Restore the cache
         uses: actions/cache@v3
@@ -29,11 +33,10 @@ jobs:
           path: |
             deps
             _build
-            dialyzer
-          key: |
-            ${{ runner.os }}-${{ steps.setup-elixir.outputs.elixir-version }}-${{ steps.setup-elixir.outputs.otp-version }}-mixlockhash-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+            priv/plts
+          key: deps-${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-${{ hashFiles('**/mix.lock') }}
           restore-keys: |
-            ${{ runner.os }}-${{ steps.setup-elixir.outputs.elixir-version }}-${{ steps.setup-elixir.outputs.otp-version }}-mixlockhash-
+            deps-${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}
 
       - name: Run CI
         run: |
