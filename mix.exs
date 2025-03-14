@@ -33,7 +33,8 @@ defmodule ZStream.MixProject do
 
   defp dialyzer do
     [
-      plt_file: {:no_warn, "dialyzer/dialyzer.plt"},
+      plt_local_path: "priv/plts/project.plt",
+      plt_core_path: "priv/plts/core.plt",
       plt_add_apps: [:ex_unit, :mix]
     ]
   end
@@ -97,7 +98,10 @@ defmodule ZStream.MixProject do
       {:ex_doc, "~> 0.30.8", only: :dev, runtime: false},
       {:ezstd, "~> 1.1"},
       {:host_triple, "~> 0.1.0"},
-      {:lz4, git: "https://github.com/rabbitmq/lz4-erlang", tag: "v1.9.4.1", manager: :make},
+      {:lz4,
+       git: "https://github.com/rabbitmq/lz4-erlang",
+       ref: "100296252d31cc4847ba35d0c8efae3569bd66cb",
+       manager: :make},
       {:sobelow, "~> 0.13.0", only: [:dev, :test], runtime: false},
       {:stream_data, "~> 1.0", only: [:dev, :test]}
     ]

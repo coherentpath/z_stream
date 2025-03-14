@@ -29,4 +29,5 @@ z_stream-*.tar
 .elixir_ls
 
 # Dialyzer generated PLT files
-/dialyzer
+/priv/plts/*.plt
+/priv/plts/*.plt.hash
