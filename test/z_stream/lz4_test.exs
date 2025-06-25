@@ -9,6 +9,11 @@ defmodule ZStream.LZ4Test do
     stream = ZStream.compress(data, LZ4)
 
     assert :ok = Stream.run(stream)
+
+    data = Enum.take(data, 0)
+    stream = ZStream.compress(data, LZ4)
+
+    assert :ok = Stream.run(stream)
   end
 
   test "decompress" do
@@ -18,5 +23,11 @@ defmodule ZStream.LZ4Test do
     stream = ZStream.decompress(stream, LZ4)
 
     assert Enum.into(stream, "") == Enum.into(data, "")
+
+    data = Enum.take(data, 0)
+    stream = ZStream.compress(data, LZ4)
+    stream = ZStream.decompress(stream, LZ4)
+
+    assert Enum.into(stream, "") == ""
   end
 end

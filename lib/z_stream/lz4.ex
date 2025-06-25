@@ -50,6 +50,11 @@ defmodule ZStream.LZ4 do
     {:erlang.iolist_to_iovec(elem), ref}
   end
 
+  defp do_compress_end({:start, ref}) do
+    finish = :lz4f.compress_end(ref)
+    {:erlang.iolist_to_iovec(finish), ref}
+  end
+
   defp do_compress_end(ref) do
     finish = :lz4f.compress_end(ref)
     {:erlang.iolist_to_iovec(finish), ref}
