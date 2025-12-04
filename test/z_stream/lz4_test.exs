@@ -30,4 +30,21 @@ defmodule ZStream.LZ4Test do
 
     assert Enum.into(stream, "") == ""
   end
+
+  test "compress empty stream" do
+    empty_data = []
+    stream = ZStream.compress(empty_data, LZ4)
+    result = Enum.into(stream, [])
+
+    assert [_ | _] = result
+  end
+
+  test "decompress empty stream" do
+    empty_data = []
+    compressed = ZStream.compress(empty_data, LZ4)
+    compressed_bytes = Enum.into(compressed, [])
+    decompressed = ZStream.decompress(compressed_bytes, LZ4)
+
+    assert Enum.into(decompressed, "") == ""
+  end
 end
